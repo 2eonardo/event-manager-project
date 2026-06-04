@@ -1,0 +1,441 @@
+{% extends "base.html" %}
+
+{% block title %}Il Mio Profilo - Event Manager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-container {
+        max-width: 1000px;
+        margin: 2rem auto;
+    }
+
+    .profile-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-header h1 {
+        margin: 0 0 0.5rem 0;
+        font-size: 2rem;
+    }
+
+    .profile-role {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.3);
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .profile-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-item {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .info-icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .info-content h3 {
+        margin: 0 0 0.25rem 0;
+        font-size: 0.85rem;
+        opacity: 0.9;
+    }
+
+    .info-content p {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .profile-body {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 2rem;
+    }
+
+    .profile-sidebar {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        height: fit-content;
+    }
+
+    .sidebar-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .sidebar-section h3 {
+        color: #667eea;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 0.5rem;
+    }
+
+    .sidebar-section p {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-section p:last-child {
+        margin-bottom: 0;
+    }
+
+    .bio-box {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 6px;
+        border-left: 4px solid #667eea;
+        font-style: italic;
+        color: #555;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .action-buttons a {
+        text-align: center;
+    }
+
+    .profile-main {
+        background: white;
+        padding: 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .events-section {
+        padding: 2rem;
+    }
+
+    .events-section h2 {
+        color: #667eea;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 0.5rem;
+    }
+
+    .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .event-card {
+        background: #f8f9fa;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 1px solid #e0e0e0;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .event-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .event-card-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+    }
+
+    .event-card-header h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+    }
+
+    .event-category-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.3);
+        padding: 0.25rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+    }
+
+    .event-card-body {
+        padding: 1rem;
+    }
+
+    .event-card-date {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .event-card-location {
+        color: #999;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+
+    .event-card-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .event-card-actions a {
+        flex: 1;
+        padding: 0.5rem;
+        text-align: center;
+        font-size: 0.85rem;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
+
+    .event-card-actions a.btn-view {
+        background-color: #667eea;
+        color: white;
+    }
+
+    .event-card-actions a.btn-view:hover {
+        background-color: #5568d3;
+    }
+
+    .event-card-actions a.btn-edit {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .event-card-actions a.btn-edit:hover {
+        background-color: #218838;
+    }
+
+    .event-card-actions a.btn-delete {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .event-card-actions a.btn-delete:hover {
+        background-color: #c82333;
+    }
+
+    .no-events {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #999;
+    }
+
+    .no-events h3 {
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .profile-body {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-info {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .events-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 2rem;
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'event_list' %}" class="back-link">← Torna agli eventi</a>
+
+<!-- Header del Profilo -->
+<div class="profile-header">
+    <span class="profile-role">
+        {% if user.role == 'organizer' %}
+            🎭 Organizzatore
+        {% else %}
+            👥 Partecipante
+        {% endif %}
+    </span>
+    <h1>{{ user.get_full_name|default:user.username }}</h1>
+
+    <div class="profile-info">
+        <div class="info-item">
+            <span class="info-icon">✉️</span>
+            <div class="info-content">
+                <h3>Email</h3>
+                <p>{{ user.email }}</p>
+            </div>
+        </div>
+
+        <div class="info-item">
+            <span class="info-icon">👤</span>
+            <div class="info-content">
+                <h3>Username</h3>
+                <p>{{ user.username }}</p>
+            </div>
+        </div>
+
+        <div class="info-item">
+            <span class="info-icon">📅</span>
+            <div class="info-content">
+                <h3>Membro dal</h3>
+                <p>{{ user.date_joined|date:"d/m/Y" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contenuto Profilo -->
+<div class="profile-body">
+    <!-- Sidebar -->
+    <div class="profile-sidebar">
+        <div class="sidebar-section">
+            <h3>📝 Informazioni</h3>
+            {% if user.bio %}
+                <div class="bio-box">{{ user.bio }}</div>
+            {% else %}
+                <p style="color: #999; font-style: italic;">Nessuna bio inserita.</p>
+            {% endif %}
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'profile_edit' %}" class="btn">✏️ Modifica Profilo</a>
+            <a href="{% url 'logout' %}" class="btn btn-secondary">🚪 Esci</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="profile-main">
+        <div class="events-section">
+            {% if user.role == 'organizer' %}
+                <!-- View per Organizzatori -->
+                <h2>🎉 I Miei Eventi</h2>
+
+                {% if organized_events %}
+                    <div class="events-grid">
+                        {% for event in organized_events %}
+                            <div class="event-card">
+                                <div class="event-card-header">
+                                    {% if event.category %}
+                                        <span class="event-category-badge">{{ event.category.name }}</span>
+                                    {% endif %}
+                                    <h3>{{ event.title }}</h3>
+                                </div>
+                                <div class="event-card-body">
+                                    <div class="event-card-date">📅 {{ event.date|date:"d/m/Y H:i" }}</div>
+                                    <div class="event-card-location">📍 {{ event.location }}</div>
+                                    <p style="color: #666; margin: 0.5rem 0; font-size: 0.9rem;">
+                                        <strong>{{ event.registrations.count }}</strong> iscritto{{ event.registrations.count|pluralize }}
+                                    </p>
+                                    <div class="event-card-actions">
+                                        <a href="{% url 'event_detail' event.id %}" class="btn-view">👁️ Visualizza</a>
+                                        <a href="{% url 'event_edit' event.id %}" class="btn-edit">✏️ Modifica</a>
+                                        <a href="{% url 'event_delete' event.id %}" class="btn-delete">🗑️ Elimina</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <a href="{% url 'event_create' %}" class="btn btn-success">+ Crea Nuovo Evento</a>
+                    </div>
+                {% else %}
+                    <div class="no-events">
+                        <div class="empty-state-icon">📭</div>
+                        <h3>Nessun evento ancora</h3>
+                        <p>Non hai ancora creato nessun evento. Inizia subito!</p>
+                        <a href="{% url 'event_create' %}" class="btn btn-success" style="margin-top: 1rem;">+ Crea il Tuo Primo Evento</a>
+                    </div>
+                {% endif %}
+
+            {% else %}
+                <!-- View per Partecipanti -->
+                <h2>🎫 I Miei Ticket (Eventi a cui sono iscritto)</h2>
+
+                {% if attended_events %}
+                    <div class="events-grid">
+                        {% for registration in attended_events %}
+                            {% with event=registration.event %}
+                                <div class="event-card">
+                                    <div class="event-card-header">
+                                        {% if event.category %}
+                                            <span class="event-category-badge">{{ event.category.name }}</span>
+                                        {% endif %}
+                                        <h3>{{ event.title }}</h3>
+                                    </div>
+                                    <div class="event-card-body">
+                                        <div class="event-card-date">📅 {{ event.date|date:"d/m/Y H:i" }}</div>
+                                        <div class="event-card-location">📍 {{ event.location }}</div>
+                                        <p style="color: #666; margin: 0.5rem 0; font-size: 0.9rem;">
+                                            Organizzato da <strong>{{ event.organizer.get_full_name|default:event.organizer.username }}</strong>
+                                        </p>
+                                        <p style="color: #999; font-size: 0.85rem; margin: 0.5rem 0;">
+                                            Iscritto il {{ registration.registered_at|date:"d/m/Y H:i" }}
+                                        </p>
+                                        <div class="event-card-actions">
+                                            <a href="{% url 'event_detail' event.id %}" class="btn-view">👁️ Visualizza</a>
+                                            <form method="POST" action="{% url 'event_unregister' event.id %}" style="flex: 1;">
+                                                {% csrf_token %}
+                                                <button type="submit" style="width: 100%; padding: 0.5rem; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; transition: background-color 0.3s;">
+                                                    ✖️ Annulla
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-events">
+                        <div class="empty-state-icon">🎫</div>
+                        <h3>Non sei iscritto a nessun evento</h3>
+                        <p>Scopri gli eventi disponibili e iscriviti a uno che ti interessa!</p>
+                        <a href="{% url 'event_list' %}" class="btn" style="margin-top: 1rem;">👀 Scopri gli Eventi</a>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

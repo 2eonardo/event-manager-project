@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Conferma Eliminazione - Event Manager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .confirmation-container {
+        max-width: 500px;
+        margin: 3rem auto;
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .confirmation-container h2 {
+        color: #dc3545;
+        margin-bottom: 1rem;
+    }
+
+    .confirmation-container p {
+        color: #666;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .event-title {
+        font-weight: bold;
+        color: #667eea;
+        font-size: 1.1rem;
+        margin: 1.5rem 0;
+    }
+
+    .confirmation-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .confirmation-actions button,
+    .confirmation-actions a {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 4px;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s;
+    }
+
+    .btn-confirm {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-confirm:hover {
+        background-color: #c82333;
+    }
+
+    .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background-color: #5a6268;
+    }
+
+    .warning-box {
+        background-color: #fff3cd;
+        border: 1px solid #ffc107;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+    }
+
+    .warning-box strong {
+        color: #856404;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="confirmation-container">
+    <h2>⚠️ Conferma Eliminazione</h2>
+
+    <div class="warning-box">
+        <strong>Attenzione!</strong> Questa azione non può essere annullata.
+    </div>
+
+    <p>Sei sicuro di voler eliminare l'evento:</p>
+    <div class="event-title">{{ event.title }}</div>
+
+    <p>Questo eliminerà anche tutte le iscrizioni associate a questo evento.</p>
+
+    <div class="confirmation-actions">
+        <form method="POST" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn-confirm">🗑️ Elimina Definitivamente</button>
+        </form>
+        <a href="{% url 'event_detail' event.id %}" class="btn-cancel">❌ Annulla</a>
+    </div>
+</div>
+{% endblock %}
+

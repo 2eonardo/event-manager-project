@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.title }} - Event Manager{% endblock %}
+
+{% block extra_css %}
+<style>
+    .event-detail-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .event-detail-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+    }
+
+    .event-detail-header h1 {
+        margin: 0 0 1rem 0;
+        font-size: 2.5rem;
+    }
+
+    .event-meta {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .meta-item {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .meta-icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .meta-content h3 {
+        margin: 0 0 0.25rem 0;
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    .meta-content p {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .event-category {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.3);
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .event-detail-body {
+        padding: 2rem;
+    }
+
+    .event-description-section {
+        margin-bottom: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 0.5rem;
+    }
+
+    .event-description {
+        line-height: 1.8;
+        color: #555;
+        font-size: 1.05rem;
+    }
+
+    .event-actions {
+        display: flex;
+        gap: 1rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+    }
+
+    .event-actions .btn {
+        padding: 0.9rem 1.8rem;
+        font-size: 1rem;
+    }
+
+    /* Attendees section */
+    .attendees-section {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-top: 2rem;
+    }
+
+    .attendees-count {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 1rem;
+    }
+
+    .attendees-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .attendee-card {
+        background: white;
+        padding: 1.25rem;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .attendee-card strong {
+        display: block;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+
+    .attendee-card small {
+        color: #999;
+        font-size: 0.85rem;
+    }
+
+    .organizer-info {
+        background: #e7f3ff;
+        padding: 1.5rem;
+        border-left: 4px solid #667eea;
+        border-radius: 4px;
+        margin-top: 2rem;
+    }
+
+    .organizer-info h3 {
+        color: #667eea;
+        margin: 0 0 0.75rem 0;
+    }
+
+    .organizer-details {
+        color: #555;
+    }
+
+    .status-message {
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .status-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .status-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-bottom: 1.5rem;
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+    .edit-delete-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .edit-delete-actions .btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+        .event-detail-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .event-meta {
+            grid-template-columns: 1fr;
+        }
+
+        .event-detail-header {
+            padding: 1.5rem;
+        }
+
+        .event-detail-body {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'event_list' %}" class="back-link">← Torna agli eventi</a>
+
+<div class="event-detail-container">
+    <div class="event-detail-header">
+        {% if event.category %}
+            <span class="event-category">🏷️ {{ event.category.name }}</span>
+        {% endif %}
+        <h1>{{ event.title }}</h1>
+
+        <div class="event-meta">
+            <div class="meta-item">
+                <span class="meta-icon">📅</span>
+                <div class="meta-content">
+                    <h3>Data e Ora</h3>
+                    <p>{{ event.date|date:"d/m/Y \a\l\l\e H:i" }}</p>
+                </div>
+            </div>
+
+            <div class="meta-item">
+                <span class="meta-icon">📍</span>
+                <div class="meta-content">
+                    <h3>Luogo</h3>
+                    <p>{{ event.location }}</p>
+                </div>
+            </div>
+
+            <div class="meta-item">
+                <span class="meta-icon">👥</span>
+                <div class="meta-content">
+                    <h3>Iscritti</h3>
+                    <p>{{ event.registrations.count }} partecipante{{ event.registrations.count|pluralize }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="event-detail-body">
+        <!-- Descrizione -->
+        <div class="event-description-section">
+            <h2 class="section-title">📖 Descrizione</h2>
+            <p class="event-description">{{ event.description|linebreaks }}</p>
+        </div>
+
+        <!-- Azioni per partecipanti -->
+        {% if user.is_authenticated and user.role == 'attendee' %}
+            <div class="event-actions">
+                {% if is_registered %}
+                    <form method="POST" action="{% url 'event_unregister' event.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">✓ Annulla iscrizione</button>
+                    </form>
+                {% else %}
+                    <form method="POST" action="{% url 'event_register' event.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">✓ Iscriviti all'evento</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% elif not user.is_authenticated %}
+            <div class="event-actions">
+                <p style="color: #666; margin: 0;">
+                    <a href="{% url 'login' %}" class="btn">Accedi per iscriverti</a>
+                </p>
+            </div>
+        {% endif %}
+
+        <!-- Azioni per organizzatore -->
+        {% if user.is_authenticated and user == event.organizer %}
+            <div class="event-actions">
+                <a href="{% url 'event_edit' event.id %}" class="btn">✏️ Modifica</a>
+                <a href="{% url 'event_delete' event.id %}" class="btn btn-danger">🗑️ Elimina</a>
+            </div>
+        {% endif %}
+
+        <!-- Elenco partecipanti (solo per organizzatore) -->
+        {% if user.is_authenticated and user == event.organizer %}
+            <div class="attendees-section">
+                <h3 class="section-title">👥 Elenco Partecipanti ({{ event.registrations.count }})</h3>
+
+                {% if event.registrations.all %}
+                    <div class="attendees-list">
+                        {% for registration in event.registrations.all %}
+                            <div class="attendee-card">
+                                <strong>{{ registration.attendee.get_full_name|default:registration.attendee.username }}</strong>
+                                <small>{{ registration.attendee.email }}</small>
+                                <small style="display: block; margin-top: 0.5rem; color: #ccc;">
+                                    Iscritto il {{ registration.registered_at|date:"d/m/Y H:i" }}
+                                </small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div style="text-align: center; padding: 2rem; color: #999;">
+                        <p>Nessuna iscrizione ancora.</p>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- Info organizzatore -->
+        <div class="organizer-info">
+            <h3>📬 Organizzato da</h3>
+            <div class="organizer-details">
+                <p>
+                    <strong><a href="{% url 'organizer_events' event.organizer.id %}" style="color: #667eea; text-decoration: none;">{{ event.organizer.get_full_name|default:event.organizer.username }}</a></strong>
+                    {% if event.organizer.bio %}
+                        <br><em>{{ event.organizer.bio }}</em>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- Info creazione -->
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #eee; color: #999; font-size: 0.9rem;">
+            <p>Evento creato il {{ event.created_at|date:"d/m/Y H:i" }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
