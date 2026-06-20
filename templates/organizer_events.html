@@ -179,14 +179,13 @@
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'event_list' %}" class="back-link">← Torna agli eventi</a>
+<a href="{% url 'event_list' %}" class="back-link">Torna agli eventi</a>
 
 <div class="organizer-header">
-    <div class="organizer-avatar">👤</div>
     <div class="organizer-info">
         <h1>{{ organizer.get_full_name|default:organizer.username }}</h1>
         {% if organizer.bio %}<p>{{ organizer.bio }}</p>{% endif %}
-        <p style="margin-top: 0.5rem; font-size: 0.95rem;">📅 <strong>{{ events.count }} evento{{ events.count|pluralize }}</strong></p>
+        <p style="margin-top: 0.5rem; font-size: 0.95rem;"><strong>{{ events.count }} evento{{ events.count|pluralize }}</strong></p>
     </div>
 </div>
 
@@ -198,19 +197,17 @@
                 <a href="{% url 'event_detail' event.id %}">
                     <div class="event-header">
                         {% if event.category %}
-                            <span class="event-category">🏷️ {{ event.category.name }}</span>
+                            <span class="event-category">{{ event.category.name }}</span>
                         {% endif %}
                         <h3 class="event-title">{{ event.title }}</h3>
                     </div>
 
                     <div class="event-body">
                         <div class="event-date">
-                            <span class="event-date-icon">📅</span>
                             <span>{{ event.date|date:"d/m/Y H:i" }}</span>
                         </div>
 
                         <div class="event-location">
-                            <span class="event-location-icon">📍</span>
                             <span>{{ event.location }}</span>
                         </div>
 
@@ -226,7 +223,7 @@
     </div>
 {% else %}
     <div class="no-events">
-        <h3>😕 Nessun evento trovato</h3>
+        <h3>Nessun evento trovato</h3>
         <p>Questo organizzatore non ha ancora creato eventi.</p>
     </div>
 {% endif %}

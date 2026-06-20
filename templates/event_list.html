@@ -278,7 +278,7 @@
 
 {% block content %}
 <div class="events-header">
-    <h1>🎉 Scopri gli Eventi</h1>
+    <h1>Scopri gli Eventi</h1>
     {% if user.is_authenticated and user.role == 'organizer' %}
         <a href="{% url 'event_create' %}" class="btn btn-success">+ Crea Nuovo Evento</a>
     {% endif %}
@@ -286,7 +286,7 @@
 
 <!-- Filtri e Ordinamento -->
 <div class="filters-section">
-    <div class="filters-title">🔍 Filtra e Ordina gli Eventi</div>
+    <div class="filters-title">Filtra e Ordina gli Eventi</div>
 
     <form method="GET" class="filters-form">
         <div class="filter-group">
@@ -353,19 +353,17 @@
                 <a href="{% url 'event_detail' event.id %}">
                     <div class="event-header">
                         {% if event.category %}
-                            <span class="event-category">🏷️ {{ event.category.name }}</span>
+                            <span class="event-category">{{ event.category.name }}</span>
                         {% endif %}
                         <h3 class="event-title">{{ event.title }}</h3>
                     </div>
 
                     <div class="event-body">
                         <div class="event-date">
-                            <span class="event-date-icon">📅</span>
                             <span>{{ event.date|date:"d/m/Y H:i" }}</span>
                         </div>
 
                         <div class="event-location">
-                            <span class="event-location-icon">📍</span>
                             <span>{{ event.location }}</span>
                         </div>
 
@@ -385,7 +383,7 @@
     </div>
 {% else %}
     <div class="no-events">
-        <h3>😕 Nessun evento trovato</h3>
+        <h3>Nessun evento trovato</h3>
         <p>Prova a modificare i filtri o visita più tardi per nuovi eventi!</p>
         {% if not user.is_authenticated %}
         {% endif %}

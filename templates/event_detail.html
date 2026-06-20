@@ -203,13 +203,12 @@
 <div class="event-detail-container">
     <div class="event-detail-header">
         {% if event.category %}
-            <span class="event-category">🏷️ {{ event.category.name }}</span>
+            <span class="event-category"> {{ event.category.name }}</span>
         {% endif %}
         <h1>{{ event.title }}</h1>
 
         <div class="event-meta">
             <div class="meta-item">
-                <span class="meta-icon">📅</span>
                 <div class="meta-content">
                     <h3>Data e Ora</h3>
                     <p>{{ event.date|date:"d/m/Y \a\l\l\e H:i" }}</p>
@@ -217,7 +216,6 @@
             </div>
 
             <div class="meta-item">
-                <span class="meta-icon">📍</span>
                 <div class="meta-content">
                     <h3>Luogo</h3>
                     <p>{{ event.location }}</p>
@@ -225,7 +223,6 @@
             </div>
 
             <div class="meta-item">
-                <span class="meta-icon">👥</span>
                 <div class="meta-content">
                     <h3>Iscritti</h3>
                     <p>{{ event.registrations.count }} partecipante{{ event.registrations.count|pluralize }}</p>
@@ -237,7 +234,7 @@
     <div class="event-detail-body">
         <!-- Descrizione -->
         <div class="event-description-section">
-            <h2 class="section-title">📖 Descrizione</h2>
+            <h2 class="section-title">Descrizione</h2>
             <p class="event-description">{{ event.description|linebreaks }}</p>
         </div>
 
@@ -247,7 +244,7 @@
 
             {% if event.date|date:"Y-m-d H:i" < current_time %}
                 <!-- Evento Concluso -->
-                <span class="status-badge status-concluded">🔒 Evento Concluso</span>
+                <span class="status-badge status-concluded">Evento Concluso</span>
             {% else %}
                 <!-- Evento Attivo: controlla permessi e iscrizione -->
                 {% if user.is_authenticated and user.role == 'attendee' %}
@@ -271,15 +268,15 @@
         <!-- Azioni di gestione riservate all'organizzatore dell'evento -->
         {% if user.is_authenticated and user == event.organizer %}
             <div class="event-actions" style="border-top: 1px solid #eee; padding-top: 1.5rem;">
-                <a href="{% url 'event_edit' event.id %}" class="btn">✏️ Modifica</a>
-                <a href="{% url 'event_delete' event.id %}" class="btn btn-danger">🗑️ Elimina</a>
+                <a href="{% url 'event_edit' event.id %}" class="btn"> Modifica</a>
+                <a href="{% url 'event_delete' event.id %}" class="btn btn-danger"> Elimina</a>
             </div>
         {% endif %}
 
         <!-- Elenco partecipanti (solo per organizzatore) -->
         {% if user.is_authenticated and user == event.organizer %}
             <div class="attendees-section">
-                <h3 class="section-title">👥 Elenco Partecipanti ({{ event.registrations.count }})</h3>
+                <h3 class="section-title">Elenco Partecipanti ({{ event.registrations.count }})</h3>
 
                 {% if event.registrations.all %}
                     <div class="attendees-list">
@@ -303,10 +300,10 @@
 
         <!-- Info organizzatore -->
         <div class="organizer-info">
-            <h3>📬 Organizzato da</h3>
+            <h3>Organizzato da</h3>
             <div class="organizer-details">
                 <p>
-                    <strong><a href="{% url 'organizer_events' event.organizer.id %}" style="color: #667eea; text-decoration: none;">{{ event.organizer.get_full_name|default:event.organizer.username }}</a></strong>
+                    <strong><a href="{% url 'organizer_events' event.organizer.id %}" style="color: #667eea; text-decoration: none;">{{ event.organizer.username }}</a></strong>
                     {% if event.organizer.bio %}
                         <br><em>{{ event.organizer.bio }}</em>
                     {% endif %}

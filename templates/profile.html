@@ -288,16 +288,15 @@
 <div class="profile-header">
     <span class="profile-role">
         {% if user.role == 'organizer' %}
-            🎭 Organizzatore
+            Organizzatore
         {% else %}
-            👥 Partecipante
+            Partecipante
         {% endif %}
     </span>
     <h1>{{ user.get_full_name|default:user.username }}</h1>
 
     <div class="profile-info">
         <div class="info-item">
-            <span class="info-icon">✉️</span>
             <div class="info-content">
                 <h3>Email</h3>
                 <p>{{ user.email }}</p>
@@ -305,7 +304,6 @@
         </div>
 
         <div class="info-item">
-            <span class="info-icon">👤</span>
             <div class="info-content">
                 <h3>Username</h3>
                 <p>{{ user.username }}</p>
@@ -313,7 +311,6 @@
         </div>
 
         <div class="info-item">
-            <span class="info-icon">📅</span>
             <div class="info-content">
                 <h3>Membro dal</h3>
                 <p>{{ user.date_joined|date:"d/m/Y" }}</p>
@@ -327,7 +324,7 @@
     <!-- Sidebar -->
     <div class="profile-sidebar">
         <div class="sidebar-section">
-            <h3>📝 Informazioni</h3>
+            <h3>Informazioni</h3>
             {% if user.bio %}
                 <div class="bio-box">{{ user.bio }}</div>
             {% else %}
@@ -336,8 +333,8 @@
         </div>
 
         <div class="action-buttons">
-            <a href="{% url 'profile_edit' %}" class="btn">✏️ Modifica Profilo</a>
-            <a href="{% url 'logout' %}" class="btn btn-secondary">🚪 Esci</a>
+            <a href="{% url 'profile_edit' %}" class="btn">✏Modifica Profilo</a>
+            <a href="{% url 'logout' %}" class="btn btn-secondary">Esci</a>
         </div>
     </div>
 
@@ -346,7 +343,7 @@
         <div class="events-section">
             {% if user.role == 'organizer' %}
                 <!-- View per Organizzatori -->
-                <h2>🎉 I Miei Eventi</h2>
+                <h2>I Miei Eventi</h2>
 
                 {% if organized_events %}
                     <div class="events-grid">
@@ -359,15 +356,15 @@
                                     <h3>{{ event.title }}</h3>
                                 </div>
                                 <div class="event-card-body">
-                                    <div class="event-card-date">📅 {{ event.date|date:"d/m/Y H:i" }}</div>
-                                    <div class="event-card-location">📍 {{ event.location }}</div>
+                                    <div class="event-card-date">{{ event.date|date:"d/m/Y H:i" }}</div>
+                                    <div class="event-card-location">{{ event.location }}</div>
                                     <p style="color: #666; margin: 0.5rem 0; font-size: 0.9rem;">
                                         <strong>{{ event.registrations.count }}</strong> iscritto{{ event.registrations.count|pluralize }}
                                     </p>
                                     <div class="event-card-actions">
-                                        <a href="{% url 'event_detail' event.id %}" class="btn-view">👁️ Visualizza</a>
-                                        <a href="{% url 'event_edit' event.id %}" class="btn-edit">✏️ Modifica</a>
-                                        <a href="{% url 'event_delete' event.id %}" class="btn-delete">🗑️ Elimina</a>
+                                        <a href="{% url 'event_detail' event.id %}" class="btn-view">Visualizza</a>
+                                        <a href="{% url 'event_edit' event.id %}" class="btn-edit">Modifica</a>
+                                        <a href="{% url 'event_delete' event.id %}" class="btn-delete">Elimina</a>
                                     </div>
                                 </div>
                             </div>
@@ -379,7 +376,6 @@
                     </div>
                 {% else %}
                     <div class="no-events">
-                        <div class="empty-state-icon">📭</div>
                         <h3>Nessun evento ancora</h3>
                         <p>Non hai ancora creato nessun evento. Inizia subito!</p>
                         <a href="{% url 'event_create' %}" class="btn btn-success" style="margin-top: 1rem;">+ Crea il Tuo Primo Evento</a>
@@ -388,7 +384,7 @@
 
             {% else %}
                 <!-- View per Partecipanti -->
-                <h2>🎫 I Miei Ticket (Eventi a cui sono iscritto)</h2>
+                <h2>I Miei Ticket (Eventi a cui sono iscritto)</h2>
 
                 {% if attended_events %}
                     <div class="events-grid">
@@ -402,8 +398,8 @@
                                         <h3>{{ event.title }}</h3>
                                     </div>
                                     <div class="event-card-body">
-                                        <div class="event-card-date">📅 {{ event.date|date:"d/m/Y H:i" }}</div>
-                                        <div class="event-card-location">📍 {{ event.location }}</div>
+                                        <div class="event-card-date">{{ event.date|date:"d/m/Y H:i" }}</div>
+                                        <div class="event-card-location">{{ event.location }}</div>
                                         <p style="color: #666; margin: 0.5rem 0; font-size: 0.9rem;">
                                             Organizzato da <strong>{{ event.organizer.get_full_name|default:event.organizer.username }}</strong>
                                         </p>
@@ -411,11 +407,11 @@
                                             Iscritto il {{ registration.registered_at|date:"d/m/Y H:i" }}
                                         </p>
                                         <div class="event-card-actions">
-                                            <a href="{% url 'event_detail' event.id %}" class="btn-view">👁️ Visualizza</a>
+                                            <a href="{% url 'event_detail' event.id %}" class="btn-view">Visualizza</a>
                                             <form method="POST" action="{% url 'event_unregister' event.id %}" style="flex: 1;">
                                                 {% csrf_token %}
                                                 <button type="submit" style="width: 100%; padding: 0.5rem; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; transition: background-color 0.3s;">
-                                                    ✖️ Annulla
+                                                    Annulla
                                                 </button>
                                             </form>
                                         </div>
@@ -426,10 +422,9 @@
                     </div>
                 {% else %}
                     <div class="no-events">
-                        <div class="empty-state-icon">🎫</div>
                         <h3>Non sei iscritto a nessun evento</h3>
                         <p>Scopri gli eventi disponibili e iscriviti a uno che ti interessa!</p>
-                        <a href="{% url 'event_list' %}" class="btn" style="margin-top: 1rem;">👀 Scopri gli Eventi</a>
+                        <a href="{% url 'event_list' %}" class="btn" style="margin-top: 1rem;">Scopri gli Eventi</a>
                     </div>
                 {% endif %}
             {% endif %}

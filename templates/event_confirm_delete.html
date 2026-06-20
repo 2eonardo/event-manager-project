@@ -84,7 +84,7 @@
 
 {% block content %}
 <div class="confirmation-container">
-    <h2>⚠️ Conferma Eliminazione</h2>
+    <h2> Conferma Eliminazione</h2>
 
     <div class="warning-box">
         <strong>Attenzione!</strong> Questa azione non può essere annullata.
@@ -98,9 +98,9 @@
     <div class="confirmation-actions">
         <form method="POST" style="display: inline;">
             {% csrf_token %}
-            <button type="submit" class="btn-confirm">🗑️ Elimina Definitivamente</button>
+            <button type="submit" class="btn-confirm"> Elimina Definitivamente</button>
         </form>
-        <a href="{% url 'event_detail' event.id %}" class="btn-cancel">❌ Annulla</a>
+        <a href="{% url 'event_detail' event.id %}" class="btn-cancel"> Annulla</a>
     </div>
 </div>
 {% endblock %}

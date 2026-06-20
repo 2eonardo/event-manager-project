@@ -136,7 +136,7 @@
 <a href="{% url 'profile' %}" class="back-link">← Torna al Profilo</a>
 
 <div class="form-container">
-    <h2>✏️ Modifica Profilo</h2>
+    <h2>Modifica Profilo</h2>
 
     <form method="POST">
         {% csrf_token %}
@@ -156,8 +156,8 @@
         {% endif %}
 
         <div class="form-actions">
-            <button type="submit" class="btn btn-success">💾 Salva Modifiche</button>
-            <a href="{% url 'profile' %}" class="btn-cancel btn">❌ Annulla</a>
+            <button type="submit" class="btn btn-success">Salva Modifiche</button>
+            <a href="{% url 'profile' %}" class="btn-cancel btn">Annulla</a>
         </div>
     </form>
 </div>

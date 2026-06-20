@@ -179,7 +179,7 @@
     {% if user.is_authenticated %}
     <nav>
         <div class="nav-container">
-            <a href="{% url 'event_list' %}" class="nav-brand">🎉 Event Manager</a>
+            <a href="{% url 'event_list' %}" class="nav-brand"> Event Manager</a>
             <ul class="nav-links">
                 <li><a href="{% url 'event_list' %}">Home</a></li>
                 {% if user.role == 'organizer' %}
@@ -188,7 +188,7 @@
                 <!-- User profile and logout section -->
                 <li style="margin-left: auto; display: flex; align-items: center; gap: 1rem;">
                     <a href="{% url 'profile' %}" style="display: flex; align-items: center; gap: 0.5rem;">
-                        👤 <span>{{ user.get_full_name|default:user.username }}</span>
+                         <span>{{user.username }}</span>
                     </a>
                     <a href="{% url 'logout' %}" style="color: white; text-decoration: none;">Esci</a>
                 </li>

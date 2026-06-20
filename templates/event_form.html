@@ -160,9 +160,9 @@
 
 <div class="form-container">
     {% if form.instance.id %}
-        <h2>✏️ Modifica Evento</h2>
+        <h2>Modifica Evento</h2>
     {% else %}
-        <h2>✨ Crea Nuovo Evento</h2>
+        <h2>Crea Nuovo Evento</h2>
     {% endif %}
 
     <form method="POST">
@@ -190,9 +190,9 @@
         <div class="form-actions">
             <button type="submit" class="btn btn-success">
                 {% if form.instance.id %}
-                    💾 Salva Modifiche
+                    Salva Modifiche
                 {% else %}
-                    ✨ Crea Evento
+                    Crea Evento
                 {% endif %}
             </button>
             <a href="{% url 'event_list' %}" class="btn-cancel btn">Annulla</a>
