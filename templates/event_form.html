@@ -165,73 +165,28 @@
         <h2>✨ Crea Nuovo Evento</h2>
     {% endif %}
 
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST">
         {% csrf_token %}
 
-        <!-- Titolo -->
-        <div class="form-group">
-            <label for="id_title">Titolo dell'Evento *</label>
-            <input type="text" id="id_title" name="title" value="{{ form.instance.title }}" required>
-            {% if form.title.errors %}
-                <div class="form-errors">{{ form.title.errors }}</div>
-            {% endif %}
-            <div class="form-help-text">Dai un titolo accattivante al tuo evento</div>
-        </div>
-
-        <!-- Descrizione -->
-        <div class="form-group">
-            <label for="id_description">Descrizione *</label>
-            <textarea id="id_description" name="description" required>{{ form.instance.description }}</textarea>
-            {% if form.description.errors %}
-                <div class="form-errors">{{ form.description.errors }}</div>
-            {% endif %}
-            <div class="form-help-text">Spiega i dettagli del tuo evento</div>
-        </div>
-
-        <!-- Data, Luogo e Categoria -->
-        <div class="form-row">
+        {% for field in form %}
             <div class="form-group">
-                <label for="id_date">Data e Ora *</label>
-                <input type="datetime-local" id="id_date" name="date" value="{% if form.instance.date %}{{ form.instance.date|date:'Y-m-dTH:i' }}{% endif %}" required>
-                {% if form.date.errors %}
-                    <div class="form-errors">{{ form.date.errors }}</div>
+                <label for="{{ field.id_for_label }}">{{ field.label }} {% if field.field.required %}*{% endif %}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="form-errors">{{ field.errors }}</div>
+                {% endif %}
+                {% if field.help_text %}
+                    <div class="form-help-text">{{ field.help_text }}</div>
                 {% endif %}
             </div>
+        {% endfor %}
 
-            <div class="form-group">
-                <label for="id_location">Luogo *</label>
-                <input type="text" id="id_location" name="location" value="{{ form.instance.location }}" required>
-                {% if form.location.errors %}
-                    <div class="form-errors">{{ form.location.errors }}</div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Categoria -->
-        <div class="form-group">
-            <label for="id_category">Categoria</label>
-            <select id="id_category" name="category">
-                <option value="">-- Seleziona una categoria --</option>
-                {% for category in categories %}
-                    <option value="{{ category.id }}" {% if form.instance.category.id == category.id %}selected{% endif %}>
-                        {{ category.name }}
-                    </option>
-                {% endfor %}
-            </select>
-            {% if form.category.errors %}
-                <div class="form-errors">{{ form.category.errors }}</div>
-            {% endif %}
-            <div class="form-help-text">Classifica il tuo evento per aiutare gli utenti a trovarlo</div>
-        </div>
-
-        <!-- Non-field errors -->
         {% if form.non_field_errors %}
             <div style="background-color: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; border: 1px solid #f5c6cb;">
                 {{ form.non_field_errors }}
             </div>
         {% endif %}
 
-        <!-- Pulsanti d'azione -->
         <div class="form-actions">
             <button type="submit" class="btn btn-success">
                 {% if form.instance.id %}
@@ -245,4 +200,3 @@
     </form>
 </div>
 {% endblock %}
-

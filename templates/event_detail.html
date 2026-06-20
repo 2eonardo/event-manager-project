@@ -96,7 +96,6 @@
         font-size: 1rem;
     }
 
-    /* Attendees section */
     .attendees-section {
         background: #f8f9fa;
         padding: 1.5rem;
@@ -152,23 +151,18 @@
         color: #555;
     }
 
-    .status-message {
-        padding: 1rem;
+    .status-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
         border-radius: 4px;
-        margin-bottom: 1rem;
-        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.9rem;
     }
 
-    .status-success {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-    }
-
-    .status-info {
-        background-color: #d1ecf1;
-        color: #0c5460;
-        border: 1px solid #bee5eb;
+    .status-concluded {
+        background-color: #6c757d;
+        color: white;
     }
 
     .back-link {
@@ -181,17 +175,6 @@
 
     .back-link:hover {
         text-decoration: underline;
-    }
-
-    .edit-delete-actions {
-        display: flex;
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .edit-delete-actions .btn {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
     }
 
     @media (max-width: 768px) {
@@ -258,32 +241,36 @@
             <p class="event-description">{{ event.description|linebreaks }}</p>
         </div>
 
-        <!-- Azioni per partecipanti -->
-        {% if user.is_authenticated and user.role == 'attendee' %}
-            <div class="event-actions">
-                {% if is_registered %}
-                    <form method="POST" action="{% url 'event_unregister' event.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">✓ Annulla iscrizione</button>
-                    </form>
-                {% else %}
-                    <form method="POST" action="{% url 'event_register' event.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-success">✓ Iscriviti all'evento</button>
-                    </form>
-                {% endif %}
-            </div>
-        {% elif not user.is_authenticated %}
-            <div class="event-actions">
-                <p style="color: #666; margin: 0;">
-                    <a href="{% url 'login' %}" class="btn">Accedi per iscriverti</a>
-                </p>
-            </div>
-        {% endif %}
+        <!-- STATO CONCLUSO VS BOTTONI DI ISCRIZIONE -->
+        <div class="event-actions">
+            {% now "Y-m-d H:i" as current_time %}
 
-        <!-- Azioni per organizzatore -->
+            {% if event.date|date:"Y-m-d H:i" < current_time %}
+                <!-- Evento Concluso -->
+                <span class="status-badge status-concluded">🔒 Evento Concluso</span>
+            {% else %}
+                <!-- Evento Attivo: controlla permessi e iscrizione -->
+                {% if user.is_authenticated and user.role == 'attendee' %}
+                    {% if is_registered %}
+                        <form method="POST" action="{% url 'event_unregister' event.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">✓ Annulla iscrizione</button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="{% url 'event_register' event.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">✓ Iscriviti all'evento</button>
+                        </form>
+                    {% endif %}
+                {% elif not user.is_authenticated %}
+                    <a href="{% url 'login' %}" class="btn">Accedi per iscriverti</a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- Azioni di gestione riservate all'organizzatore dell'evento -->
         {% if user.is_authenticated and user == event.organizer %}
-            <div class="event-actions">
+            <div class="event-actions" style="border-top: 1px solid #eee; padding-top: 1.5rem;">
                 <a href="{% url 'event_edit' event.id %}" class="btn">✏️ Modifica</a>
                 <a href="{% url 'event_delete' event.id %}" class="btn btn-danger">🗑️ Elimina</a>
             </div>
@@ -300,7 +287,7 @@
                             <div class="attendee-card">
                                 <strong>{{ registration.attendee.get_full_name|default:registration.attendee.username }}</strong>
                                 <small>{{ registration.attendee.email }}</small>
-                                <small style="display: block; margin-top: 0.5rem; color: #ccc;">
+                                <small style="display: block; margin-top: 0.5rem; color: #aaa;">
                                     Iscritto il {{ registration.registered_at|date:"d/m/Y H:i" }}
                                 </small>
                             </div>
@@ -334,4 +321,3 @@
     </div>
 </div>
 {% endblock %}
-

@@ -1,12 +1,13 @@
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.utils import timezone  # <--- IMPORTANTE per gestire la data odierna
 
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
     class Meta:
-        # Dice a Django Admin di scrivere "Categories" invece di "Categorys" al plurale
         verbose_name_plural = "Categories"
 
     def __str__(self):
@@ -18,9 +19,6 @@ class Event(models.Model):
     description = models.TextField()
     date = models.DateTimeField()
     location = models.CharField(max_length=200)
-
-    # NUOVO CAMPO: Relazione ForeignKey con la Categoria.
-    # Se eliminiamo una categoria, gli eventi ad essa collegati non vengono cancellati (on_delete=models.SET_NULL)
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
@@ -28,8 +26,6 @@ class Event(models.Model):
         blank=True,
         related_name='events'
     )
-
-    # Relazione ForeignKey con l'utente (l'organizzatore dell'evento)
     organizer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -38,8 +34,29 @@ class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        # NUOVA IMPOSTAZIONE: Ordina gli eventi dal più vicino (nel tempo) al più lontano
         ordering = ['date']
+
+    # --- LOGICA DI CONVALIDA INTEGRATA NEL MODELLO (FAT MODEL) ---
+    def clean(self):
+        super().clean()
+
+        # 1. Impedisci date nel passato quando si crea un nuovo evento
+        # (Se l'evento non ha ancora un ID, significa che lo stiamo creando adesso)
+        if not self.pk and self.date and self.date < timezone.now():
+            raise ValidationError("Non è possibile creare un evento con una data passata.")
+
+        # 2. Impedisci la creazione di eventi duplicati dallo stesso organizzatore
+        if hasattr(self, 'organizer') and self.organizer:
+            duplicati = Event.objects.filter(
+                title__iexact=self.title,
+                date=self.date,
+                location__iexact=self.location,
+                organizer=self.organizer
+            )
+            if self.pk:
+                duplicati = duplicati.exclude(pk=self.pk)
+            if duplicati.exists():
+                raise ValidationError("Hai già creato un evento identico (stesso titolo, data e luogo).")
 
     def __str__(self):
         return self.title
