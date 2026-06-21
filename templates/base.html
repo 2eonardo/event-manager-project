@@ -190,7 +190,12 @@
                     <a href="{% url 'profile' %}" style="display: flex; align-items: center; gap: 0.5rem;">
                          <span>{{user.username }}</span>
                     </a>
-                    <a href="{% url 'logout' %}" style="color: white; text-decoration: none;">Esci</a>
+                    <form action="{% url 'logout' %}" method="POST" style="display: inline; margin: 0; padding: 0;">
+                    {% csrf_token %}
+                        <button type="submit" style="background: none; border: none; color: white; cursor: pointer; font-family: inherit; font-size: inherit; font-weight: inherit; text-decoration: none; padding: 0;">
+                            Esci
+                        </button>
+                    </form>                
                 </li>
             </ul>
         </div>

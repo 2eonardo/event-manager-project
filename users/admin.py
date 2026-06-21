@@ -1,12 +1,29 @@
+# users/admin.py
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
+from .forms import SignupForm
 
-# Questo permette di vedere il campo "role" e "bio" nel pannello Admin
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
+
+    # 1. Colleghiamo il tuo form di registrazione
+    add_form = SignupForm
+
+    # 2. Colonne visibili nella lista riassuntiva di tutti gli utenti [17]
+    list_display = ['username', 'email', 'first_name', 'last_name', 'role', 'is_staff']
+
+    # 3. Campi visibili e modificabili quando entri dentro il profilo di un utente esistente [17]
     fieldsets = UserAdmin.fieldsets + (
-        ('Informazioni Ruolo', {'fields': ('role', 'bio')}),
+        ('Informazioni Ruolo e Bio', {'fields': ('role', 'bio')}),
     )
+
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'email', 'first_name', 'last_name','password1', 'password2', 'role', 'bio'),
+        }),
+    )
+
 
 admin.site.register(CustomUser, CustomUserAdmin)

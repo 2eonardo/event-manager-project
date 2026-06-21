@@ -6,6 +6,7 @@ from django.views.decorators.http import require_http_methods
 from .models import CustomUser
 from .forms import SignupForm, ProfileEditForm  # <--- Import dei nuovi form
 from events.models import Registration
+from django.views.decorators.http import require_POST # <--- Assicurati che questo import sia presente in alto
 
 @require_http_methods(["GET", "POST"])
 def login_view(request):
@@ -48,12 +49,12 @@ def signup_view(request):
 
 
 @login_required(login_url='login')
+@require_POST # <--- Forza la vista ad accettare SOLO richieste POST
 def logout_view(request):
     """Vista per il logout"""
     logout(request)
     messages.success(request, 'Logout effettuato con successo.')
     return redirect('login')
-
 
 @login_required(login_url='login')
 def profile_view(request):

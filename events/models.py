@@ -40,10 +40,20 @@ class Event(models.Model):
     def clean(self):
         super().clean()
 
-        # 1. Impedisci date nel passato quando si crea un nuovo evento
-        # (Se l'evento non ha ancora un ID, significa che lo stiamo creando adesso)
-        if not self.pk and self.date and self.date < timezone.now():
-            raise ValidationError("Non è possibile creare un evento con una data passata.")
+        # 1. Controlla la validità della data (deve essere nel futuro)
+        if self.date:
+            is_new = not self.pk
+            date_changed = False
+
+            # Se l'evento esiste già, controlliamo se la data è stata effettivamente modificata
+            if not is_new:
+                old_event = Event.objects.filter(pk=self.pk).first()
+                if old_event and old_event.date != self.date:
+                    date_changed = True
+
+            # Blocca le date passate sia alla creazione sia alla modifica della data
+            if (is_new or date_changed) and self.date < timezone.now():
+                raise ValidationError("La data dell'evento deve essere nel futuro.")
 
         # 2. Impedisci la creazione di eventi duplicati dallo stesso organizzatore
         if hasattr(self, 'organizer') and self.organizer:
@@ -57,9 +67,6 @@ class Event(models.Model):
                 duplicati = duplicati.exclude(pk=self.pk)
             if duplicati.exists():
                 raise ValidationError("Hai già creato un evento identico (stesso titolo, data e luogo).")
-
-    def __str__(self):
-        return self.title
 
 
 class Registration(models.Model):

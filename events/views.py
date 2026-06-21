@@ -152,7 +152,7 @@ class EventDeleteView(LoginRequiredMixin, EventOwnerRequiredMixin, DeleteView):
 @login_required(login_url='login')
 @require_http_methods(["POST"])
 def event_register(request, pk):
-    """Vista per iscriversi a un evento"""
+    """Vista per iscriversi a un evento in modo atomico e sicuro"""
     event = get_object_or_404(Event, pk=pk)
 
     # 1. CONTROLLO EVENTO CONCLUSO: impedisci iscrizione se la data è passata
@@ -161,19 +161,21 @@ def event_register(request, pk):
         messages.error(request, 'Operazione negata. L’evento è già concluso.')
         return redirect('event_detail', pk=event.id)
 
-    # 2. Verificare che l'utente sia un partecipante
+    # 2. Verificare che l'utente sia un partecipante (attendee)
     if request.user.role != 'attendee':
         messages.error(request, 'Solo i partecipanti possono iscriversi agli eventi.')
         return redirect('event_detail', pk=event.id)
 
-    # 3. Verificare se già iscritto
-    if Registration.objects.filter(event=event, attendee=request.user).exists():
-        messages.info(request, 'Sei già iscritto a questo evento!')
-        return redirect('event_detail', pk=event.id)
+    # 3. Iscrizione atomica concorrente con get_or_create (evita crash di sistema)
+    registration, created = Registration.objects.get_or_create(
+        event=event,
+        attendee=request.user
+    )
 
-    # Creare la registrazione
-    Registration.objects.create(event=event, attendee=request.user)
-    messages.success(request, f'Iscrizione effettuata per "{event.title}"!')
+    if created:
+        messages.success(request, f'Iscrizione effettuata per "{event.title}"!')
+    else:
+        messages.info(request, 'Sei già iscritto a questo evento!')
 
     return redirect('event_detail', pk=event.id)
 
