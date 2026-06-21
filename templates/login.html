@@ -92,7 +92,7 @@
         {% csrf_token %}
 
         <div class="form-group">
-            <label for="id_username">Username</label>
+            <label for="id_username">Username o Email</label>
             <input type="text" id="id_username" name="username" required>
             {% if form.username.errors %}
                 <div class="form-errors">{{ form.username.errors }}</div>

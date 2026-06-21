@@ -1,7 +1,9 @@
 # event-manager-project
 ---
+- **Stutende:** Leonardo Soldani 7139732
 - **Tipo di progetto:** Full-Stack Web Application
 - **Framework utilizzato:** Django 6.0
+- **Deployed version:**
 ---
 
 ## Descrizione del Progetto
@@ -24,7 +26,21 @@ Il sito è strutturato attraverso i seguenti template dinamici, tutti estesi da 
    * Gli *Organizer* vedono solo l'elenco degli eventi creati da loro.
 
 ---
+## Funzionalità Implementate
 
+---
+## Istruzioni installazione e avvio del progetto
+
+---
+## Testing Scenario 
+
+---
+## DataBase SQLite
+Il file di database incluso nel progetto si chiama **`db.sqlite3`**.
+
+All'interno del database sono già presenti 2 account di prova per ogni ruolo, username e password sono riportati nella sezione successiva.
+Inoltre il database è già stato popolato con diversi eventi di esempio e categorie di quest'ultimi.
+---
 ## Credenziali di Prova (Demo Accounts)
 
 Per testare le diverse funzionalità e i permessi dell'applicazione direttamente dal browser, utilizzare i seguenti account fittizi già presenti nel database di demo:
@@ -34,14 +50,18 @@ Per testare le diverse funzionalità e i permessi dell'applicazione direttamente
 - **Password:** `admin12345`
 - **Ruolo:** Amministratore del sito (accesso a `/admin`)
 
-### Organizzatore (Organizer):
+### Organizzatori (Organizer):
 - **Username:** `demo_organizer1`
 - **Password:** `organizer12345`
+- **Username:** `demo_organizer2`
+- **Password:** `cpx12345`
 - **Ruolo:** Organizzatore di eventi
 
-### Partecipante (Attendee):
+### Partecipant (Attendee):
 - **Username:** `demo_attendee1`
 - **Password:** `attendee12345`
+- **Username:** `demo_attendee2`
+- **Password:** `cpx12345`
 - **Ruolo:** Utente partecipante standard
 
 ---

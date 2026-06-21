@@ -115,14 +115,18 @@ class EventCreateView(LoginRequiredMixin, OrganizerRequiredMixin, CreateView):
     form_class = EventForm
     template_name = 'event_form.html'
 
-    def form_valid(self, form):
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
         form.instance.organizer = self.request.user
+        return form
+
+    def form_valid(self, form):
+        # Quando arriviamo qui, il controllo anti-duplicato è già passato con successo
         messages.success(self.request, 'Evento creato con successo!')
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('event_detail', kwargs={'pk': self.object.pk})
-
 
 class EventUpdateView(LoginRequiredMixin, EventOwnerRequiredMixin, UpdateView):
     model = Event

@@ -8,6 +8,8 @@ from .forms import SignupForm, ProfileEditForm  # <--- Import dei nuovi form
 from events.models import Registration
 from django.views.decorators.http import require_POST # <--- Assicurati che questo import sia presente in alto
 
+# users/views.py
+
 @require_http_methods(["GET", "POST"])
 def login_view(request):
     """Vista per il login"""
@@ -15,16 +17,27 @@ def login_view(request):
         return redirect('event_list')
 
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username_or_email = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
+
+        # --- RISOLUZIONE EMAIL -> USERNAME ---
+        # Se l'utente inserisce una chiocciola, cerchiamo lo username corrispondente alla mail
+        resolved_username = username_or_email
+        if '@' in username_or_email:
+            user_found = CustomUser.objects.filter(email__iexact=username_or_email).first()
+            if user_found:
+                resolved_username = user_found.username
+        # --------------------------------------
+
+        # Eseguiamo l'autenticazione standard di Django usando lo username risolto
+        user = authenticate(request, username=resolved_username, password=password)
 
         if user is not None:
             login(request, user)
             messages.success(request, f'Benvenuto {user.username}!')
             return redirect('event_list')
         else:
-            messages.error(request, 'Username o password non validi.')
+            messages.error(request, 'Username, Email o password non validi.')
 
     return render(request, 'login.html')
 
