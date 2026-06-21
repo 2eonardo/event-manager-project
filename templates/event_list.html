@@ -339,7 +339,7 @@
             <strong>Filtri attivi:</strong>
             {% if selected_category %}{{ selected_category.name }}{% endif %}
             {% if date_obj %}il {{ date_obj|date:"d/m/Y" }}{% endif %}
-            {% if location %}— luogo: "{{ location }}"{% endif %}
+            {% if location %} luogo: "{{ location }}"{% endif %}
             {% if order_by %}(ordinato: {{ order_by }}){% endif %}
         </p>
     </div>
@@ -368,7 +368,7 @@
                         </div>
 
                         {% if user.is_authenticated and user in event.registrations.all|dictsort:"attendee" %}
-                            <span class="status-badge status-registered">✓ Sei iscritto</span>
+                            <span class="status-badge status-registered">Sei iscritto</span>
                         {% endif %}
 
                         <p class="event-description">{{ event.description|truncatewords:30 }}</p>

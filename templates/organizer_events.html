@@ -184,8 +184,13 @@
 <div class="organizer-header">
     <div class="organizer-info">
         <h1>{{ organizer.get_full_name|default:organizer.username }}</h1>
+        {% if organizer.email %}
+            <p style="font-size: 1.1rem; opacity: 0.8; margin-top: -0.4rem; margin-bottom: 0.5rem; font-weight: 500;">
+                {{ organizer.email }}
+            </p>
+        {% endif %}
         {% if organizer.bio %}<p>{{ organizer.bio }}</p>{% endif %}
-        <p style="margin-top: 0.5rem; font-size: 0.95rem;"><strong>{{ events.count }} evento{{ events.count|pluralize }}</strong></p>
+        <p style="margin-top: 0.5rem; font-size: 0.95rem;"><strong>{{ events.count }} event{{ events.count|pluralize:"o,i" }}</strong></p>
     </div>
 </div>
 
@@ -212,7 +217,7 @@
                         </div>
 
                         {% if user.is_authenticated and user in event.registrations.all|dictsort:"attendee" %}
-                            <span class="status-badge status-registered">✓ Sei iscritto</span>
+                            <span class="status-badge status-registered">Sei iscritto</span>
                         {% endif %}
 
                         <p class="event-description">{{ event.description|truncatewords:30 }}</p>
@@ -224,7 +229,7 @@
 {% else %}
     <div class="no-events">
         <h3>Nessun evento trovato</h3>
-        <p>Questo organizzatore non ha ancora creato eventi.</p>
+        <p>Questo organizzatore non ha ancora creato eventi</p>
     </div>
 {% endif %}
 

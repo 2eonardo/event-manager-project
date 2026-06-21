@@ -179,7 +179,7 @@
     {% if user.is_authenticated %}
     <nav>
         <div class="nav-container">
-            <a href="{% url 'event_list' %}" class="nav-brand"> Event Manager</a>
+            <a href="{% url 'event_list' %}" class="nav-brand">Event Manager</a>
             <ul class="nav-links">
                 <li><a href="{% url 'event_list' %}">Home</a></li>
                 {% if user.role == 'organizer' %}
@@ -193,7 +193,7 @@
                     <form action="{% url 'logout' %}" method="POST" style="display: inline; margin: 0; padding: 0;">
                     {% csrf_token %}
                         <button type="submit" style="background: none; border: none; color: white; cursor: pointer; font-family: inherit; font-size: inherit; font-weight: inherit; text-decoration: none; padding: 0;">
-                            Esci
+                            Log Out
                         </button>
                     </form>                
                 </li>

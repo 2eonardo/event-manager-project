@@ -198,7 +198,7 @@
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'event_list' %}" class="back-link">← Torna agli eventi</a>
+<a href="{% url 'event_list' %}" class="back-link"> Torna agli eventi</a>
 
 <div class="event-detail-container">
     <div class="event-detail-header">
@@ -225,7 +225,7 @@
             <div class="meta-item">
                 <div class="meta-content">
                     <h3>Iscritti</h3>
-                    <p>{{ event.registrations.count }} partecipante{{ event.registrations.count|pluralize }}</p>
+                    <p>{{ event.registrations.count }} partecipant{{ event.registrations.count|pluralize:"e,i" }}</p>
                 </div>
             </div>
         </div>
@@ -251,16 +251,14 @@
                     {% if is_registered %}
                         <form method="POST" action="{% url 'event_unregister' event.id %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">✓ Annulla iscrizione</button>
+                            <button type="submit" class="btn btn-danger">Annulla iscrizione</button>
                         </form>
                     {% else %}
                         <form method="POST" action="{% url 'event_register' event.id %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-success">✓ Iscriviti all'evento</button>
+                            <button type="submit" class="btn btn-success">Iscriviti all'evento</button>
                         </form>
                     {% endif %}
-                {% elif not user.is_authenticated %}
-                    <a href="{% url 'login' %}" class="btn">Accedi per iscriverti</a>
                 {% endif %}
             {% endif %}
         </div>
@@ -292,7 +290,7 @@
                     </div>
                 {% else %}
                     <div style="text-align: center; padding: 2rem; color: #999;">
-                        <p>Nessuna iscrizione ancora.</p>
+                        <p>Nessuna iscrizione</p>
                     </div>
                 {% endif %}
             </div>
