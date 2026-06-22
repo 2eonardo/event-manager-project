@@ -4,9 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods, require_POST
 from .models import CustomUser
-from .forms import SignupForm, ProfileEditForm  # <--- Import dei nuovi form
-from events.models import Registration
-# users/views.py
+from .forms import SignupForm, ProfileEditForm
 
 @require_http_methods(["GET", "POST"])
 def login_view(request):
@@ -18,16 +16,11 @@ def login_view(request):
         username_or_email = request.POST.get('username')
         password = request.POST.get('password')
 
-        # --- RISOLUZIONE EMAIL -> USERNAME ---
-        # Se l'utente inserisce una chiocciola, cerchiamo lo username corrispondente alla mail
         resolved_username = username_or_email
         if '@' in username_or_email:
             user_found = CustomUser.objects.filter(email__iexact=username_or_email).first()
             if user_found:
                 resolved_username = user_found.username
-        # --------------------------------------
-
-        # Eseguiamo l'autenticazione standard di Django usando lo username risolto
         user = authenticate(request, username=resolved_username, password=password)
 
         if user is not None:
@@ -42,14 +35,13 @@ def login_view(request):
 
 @require_http_methods(["GET", "POST"])
 def signup_view(request):
-    """Vista per la registrazione con validazione automatica del Form"""
     if request.user.is_authenticated:
         return redirect('event_list')
 
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            user = form.save()  # Crea l'utente e cripta la password automaticamente
+            user = form.save()
             login(request, user)
             messages.success(request, 'Registrazione effettuata con successo! Benvenuto!')
             return redirect('event_list')
@@ -60,16 +52,14 @@ def signup_view(request):
 
 
 @login_required(login_url='login')
-@require_POST # <--- Forza la vista ad accettare SOLO richieste POST
+@require_POST
 def logout_view(request):
-    """Vista per il logout"""
     logout(request)
     messages.success(request, 'Logout effettuato con successo.')
     return redirect('login')
 
 @login_required(login_url='login')
 def profile_view(request):
-    """Vista per visualizzare il profilo dell'utente"""
     user = request.user
     if user.role == 'organizer':
         organized_events = user.organized_events.all()
@@ -83,7 +73,6 @@ def profile_view(request):
 @login_required(login_url='login')
 @require_http_methods(["GET", "POST"])
 def profile_edit_view(request):
-    """Vista per modificare il profilo con ProfileEditForm"""
     user = request.user
     if request.method == 'POST':
         form = ProfileEditForm(request.POST, instance=user)

@@ -14,8 +14,6 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-# --- MIXINS DI PERMESSO PERSONALIZZATI ---
-
 class OrganizerRequiredMixin(UserPassesTestMixin):
     """Verifica che l'utente sia un organizzatore"""
 
@@ -40,8 +38,6 @@ class EventOwnerRequiredMixin(UserPassesTestMixin):
 
 
 # --- VISTE DEL PROGETTO ---
-
-# events/views.py
 
 @login_required(login_url='login')
 def event_list(request):
@@ -114,8 +110,6 @@ def event_detail(request, pk):
     return render(request, 'event_detail.html', context)
 
 
-# --- CLASS-BASED VIEWS PER LE OPERAZIONI CRUD ---
-
 class EventCreateView(LoginRequiredMixin, OrganizerRequiredMixin, CreateView):
     model = Event
     form_class = EventForm
@@ -157,25 +151,20 @@ class EventDeleteView(LoginRequiredMixin, EventOwnerRequiredMixin, DeleteView):
         return super().post(request, *args, **kwargs)
 
 
-# --- VISTE DI ISCRIZIONE ---
-
 @login_required(login_url='login')
 @require_http_methods(["POST"])
 def event_register(request, pk):
     """Vista per iscriversi a un evento in modo atomico e sicuro"""
     event = get_object_or_404(Event, pk=pk)
 
-    # 1. CONTROLLO EVENTO CONCLUSO: impedisci iscrizione se la data è passata
     if event.date < timezone.now():
         messages.error(request, 'Operazione negata. L’evento è già concluso.')
         return redirect('event_detail', pk=event.id)
 
-    # 2. Verificare che l'utente sia un partecipante (attendee)
     if request.user.role != 'attendee':
         messages.error(request, 'Solo i partecipanti possono iscriversi agli eventi.')
         return redirect('event_detail', pk=event.id)
 
-    # 3. Iscrizione atomica concorrente con get_or_create (evita crash di sistema)
     registration, created = Registration.objects.get_or_create(
         event=event,
         attendee=request.user

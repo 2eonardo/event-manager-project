@@ -334,7 +334,12 @@
 
         <div class="action-buttons">
             <a href="{% url 'profile_edit' %}" class="btn">Modifica Profilo</a>
-            <a href="{% url 'logout' %}" class="btn btn-secondary">Esci</a>
+            <form action="{% url 'logout' %}" method="POST" style="display: inline; width: 100%;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary" style="width: 100%; cursor: pointer;">
+                    Esci
+                </button>
+            </form>
         </div>
     </div>
 
@@ -342,7 +347,6 @@
     <div class="profile-main">
         <div class="events-section">
             {% if user.role == 'organizer' %}
-                <!-- View per Organizzatori -->
                 <h2>I Miei Eventi</h2>
 
                 {% if organized_events %}
@@ -383,7 +387,6 @@
                 {% endif %}
 
             {% else %}
-                <!-- View per Partecipanti -->
                 <h2>I Miei Ticket (Eventi a cui sono iscritto)</h2>
 
                 {% if attended_events %}

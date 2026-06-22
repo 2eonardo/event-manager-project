@@ -1,10 +1,8 @@
-# users/forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 
 class SignupForm(UserCreationForm):
-    # Rendiamo esplicitamente obbligatori questi tre campi aggiungendo l'asterisco all'etichetta
     email = forms.EmailField(required=True, label="Email *")
     first_name = forms.CharField(required=True, label="Nome *")
     last_name = forms.CharField(required=True, label="Cognome *")
@@ -49,10 +47,8 @@ class ProfileEditForm(forms.ModelForm):
             'bio': 'Bio',
         }
 
-    # --- CONTROLLO EMAIL DUPLICATE IN MODIFICA PROFILO ---
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        # Controlliamo se la mail è già usata da un ALTRO utente (escludendo l'utente corrente: self.instance.pk)
         if CustomUser.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError("Questo indirizzo email è già utilizzato da un altro account.")
         return email

@@ -1,4 +1,3 @@
-# users/tests.py
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -36,7 +35,6 @@ class UserAuthenticationAndProfileTests(TestCase):
         self.future_date = timezone.now() + timedelta(days=5)
 
     def test_signup_successful(self):
-        """Verifica che la registrazione di un nuovo utente con ruolo avvenga correttamente"""
         response = self.client.post(self.signup_url, {
             'username': 'nuovo_utente_test',
             'email': 'nuovoutente@test.com',
@@ -50,7 +48,6 @@ class UserAuthenticationAndProfileTests(TestCase):
         self.assertTrue(User.objects.filter(username='nuovo_utente_test').exists())
 
     def test_prevent_duplicate_email_on_signup(self):
-        """Verifica che il sistema impedisca registrazioni con email già utilizzate"""
         response = self.client.post(self.signup_url, {
             'username': 'altro_utente',
             'email': 'attendee1@test.com',  # Email già associata a demo_attendee1
@@ -60,12 +57,10 @@ class UserAuthenticationAndProfileTests(TestCase):
             'password2': 'cpx12345!',
             'role': 'attendee'
         })
-        self.assertEqual(response.status_code, 200)  # Ritorna alla stessa pagina con errori
+        self.assertEqual(response.status_code, 200)
         self.assertFalse(User.objects.filter(username='altro_utente').exists())
 
     def test_profile_views_based_on_role_organizer(self):
-        """Verifica che l'organizzatore veda nel suo profilo solo gli eventi da lui creati"""
-        # Crea evento associato all'organizzatore
         event = Event.objects.create(
             title="Conferenza Organizzatore",
             description="Descrizione",
@@ -81,7 +76,6 @@ class UserAuthenticationAndProfileTests(TestCase):
         self.assertContains(response, "Conferenza Organizzatore")
 
     def test_profile_views_based_on_role_attendee(self):
-        """Verifica che il partecipante veda solo gli eventi a cui è iscritto (Ticket)"""
         event = Event.objects.create(
             title="Incontro Culturale",
             description="Descrizione",
@@ -99,7 +93,6 @@ class UserAuthenticationAndProfileTests(TestCase):
         self.assertContains(response, "Incontro Culturale")
 
     def test_profile_edit_successful(self):
-        """Verifica che la modifica dei propri dati personali avvenga con successo"""
         self.client.login(username="demo_attendee1", password="password123")
         response = self.client.post(self.profile_edit_url, {
             'first_name': 'Leonardo',
@@ -113,7 +106,6 @@ class UserAuthenticationAndProfileTests(TestCase):
         self.assertEqual(self.attendee.bio, 'Nuova bio di Leonardo.')
 
     def test_prevent_email_duplication_on_profile_edit(self):
-        """Verifica che non sia possibile modificare il profilo usando la mail di un altro utente"""
         self.client.login(username="demo_attendee1", password="password123")
         response = self.client.post(self.profile_edit_url, {
             'first_name': 'Leonardo',
@@ -125,15 +117,11 @@ class UserAuthenticationAndProfileTests(TestCase):
         self.assertNotEqual(self.attendee.email, 'organizer1@test.com')
 
     def test_login_with_email_successful(self):
-        """Verifica che un utente possa effettuare il login inserendo la mail nel form di login"""
-        # Inviamo una richiesta POST simulando la compilazione del form nel browser
         response = self.client.post(self.login_url, {
-            'username': 'attendee1@test.com',  # Inseriamo l'email nel campo username
+            'username': 'attendee1@test.com',
             'password': 'password123'
         })
 
-        # Se il login ha successo, la vista deve reindirizzare l'utente (status_code 302)
         self.assertEqual(response.status_code, 302)
 
-        # Verifichiamo che la sessione di autenticazione sia attiva nel browser del client
         self.assertTrue('_auth_user_id' in self.client.session)

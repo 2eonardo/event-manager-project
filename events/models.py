@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.utils import timezone  # <--- IMPORTANTE per gestire la data odierna
+from django.utils import timezone
 
 
 class Category(models.Model):

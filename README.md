@@ -52,6 +52,38 @@ Gli organizzatori non possono iscriversi agli eventi come i partecipanti, ma pre
 ---
 ## Istruzioni installazione e avvio del progetto
 
+### 1. Clona il repository
+Apri il terminale e clona il progetto sul tuo computer:
+```bash
+git clone <URL_DEL_TUO_REPOSITORY_GITHUB>
+cd event-manager-project
+```
+Windows:
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+macOS/Linux:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+```bash
+pip install -r requirements.txt
+```
+Windows:
+```bash
+copy .env.example .env
+```
+macOS/Linux:
+```bash
+cp .env.example .env
+```
+```bash
+python manage.py runserver
+```
+
+ 
 ---
 ## Testing Scenario
 

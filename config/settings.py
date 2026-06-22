@@ -2,29 +2,22 @@ import os
 from pathlib import Path
 import environ # <--- Importa django-environ
 
-# Inizializza environ
 env = environ.Env(
-    DEBUG=(bool, False) # Di default DEBUG è impostato a False (sicurezza in produzione)
+    DEBUG=(bool, False)
 )
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Leggi il file .env (caricato solo in locale per lo sviluppo)
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-# Legge SECRET_KEY dal file .env, altrimenti usa una chiave generica di sviluppo locale
+
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-sviluppo-locale-molto-lungo-e-sicuro')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-# Legge la lista degli host consentiti (es. in produzione leggerà l'URL del tuo deploy)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
 
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,6 +32,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -112,9 +106,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+# config/settings.py
+
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 AUTH_USER_MODEL = 'users.CustomUser'
 
 LOGIN_REDIRECT_URL = 'event_list'
 LOGOUT_REDIRECT_URL = 'login'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
