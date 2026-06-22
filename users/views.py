@@ -2,12 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 from .models import CustomUser
 from .forms import SignupForm, ProfileEditForm  # <--- Import dei nuovi form
 from events.models import Registration
-from django.views.decorators.http import require_POST # <--- Assicurati che questo import sia presente in alto
-
 # users/views.py
 
 @require_http_methods(["GET", "POST"])

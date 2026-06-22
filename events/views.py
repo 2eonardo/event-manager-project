@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.decorators.http import require_http_methods
+from django.utils import timezone
 from datetime import datetime
 from .models import Event, Registration, Category
 from .forms import EventForm
@@ -40,6 +41,8 @@ class EventOwnerRequiredMixin(UserPassesTestMixin):
 
 # --- VISTE DEL PROGETTO ---
 
+# events/views.py
+
 @login_required(login_url='login')
 def event_list(request):
     """Visualizza e filtra gli eventi"""
@@ -58,8 +61,11 @@ def event_list(request):
     if date:
         try:
             parsed_dt = datetime.strptime(date, '%Y-%m-%d')
-            start_of_day = parsed_dt.replace(hour=0, minute=0, second=0)
-            end_of_day = parsed_dt.replace(hour=23, minute=59, second=59)
+
+            # Rendiamo gli orari di inizio e fine giornata consapevoli del fuso orario (make_aware)
+            start_of_day = timezone.make_aware(parsed_dt.replace(hour=0, minute=0, second=0))
+            end_of_day = timezone.make_aware(parsed_dt.replace(hour=23, minute=59, second=59))
+
             events = events.filter(date__gte=start_of_day, date__lte=end_of_day)
             date_obj = parsed_dt.date()
         except ValueError:
@@ -160,7 +166,6 @@ def event_register(request, pk):
     event = get_object_or_404(Event, pk=pk)
 
     # 1. CONTROLLO EVENTO CONCLUSO: impedisci iscrizione se la data è passata
-    from django.utils import timezone
     if event.date < timezone.now():
         messages.error(request, 'Operazione negata. L’evento è già concluso.')
         return redirect('event_detail', pk=event.id)
