@@ -4,7 +4,7 @@
 - **Tipo di progetto:** Full-Stack Web Application
 - **Framework utilizzato:** Django 5.1.1
 - **Versione Python:** 3.12.10
-- **Deployed version:**
+- **Deployed version:** https://event-manager-project.onrender.com
 ---
 
 ## Descrizione del Progetto
