@@ -1,91 +1,14 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Accedi - Event Manager{% endblock %}
 
 {% block extra_css %}
-<style>
-    .form-container {
-        max-width: 400px;
-        margin: 3rem auto;
-        background: white;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-container h2 {
-        text-align: center;
-        margin-bottom: 2rem;
-        color: #667eea;
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: 500;
-        color: #333;
-    }
-
-    .form-group input {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1rem;
-        transition: border-color 0.3s;
-    }
-
-    .form-group input:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    .form-errors {
-        color: #dc3545;
-        font-size: 0.875rem;
-        margin-top: 0.25rem;
-    }
-
-    .form-errors ul {
-        margin: 0;
-        padding-left: 1.25rem;
-    }
-
-    .form-actions {
-        display: flex;
-        gap: 1rem;
-        margin-top: 2rem;
-    }
-
-    .form-actions button {
-        flex: 1;
-    }
-
-    .signup-link {
-        text-align: center;
-        margin-top: 1.5rem;
-        color: #666;
-    }
-
-    .signup-link a {
-        color: #667eea;
-        text-decoration: none;
-        font-weight: 500;
-    }
-
-    .signup-link a:hover {
-        text-decoration: underline;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="form-container">
+<div class="form-container form-container-xs">
     <h2>Accedi</h2>
 
     <form method="POST">
@@ -121,4 +44,3 @@
     </div>
 </div>
 {% endblock %}
-

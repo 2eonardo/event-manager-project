@@ -1,279 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Elenco Eventi - Event Manager{% endblock %}
 
 {% block extra_css %}
-<style>
-    .events-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-        gap: 2rem;
-        flex-wrap: wrap;
-    }
-
-    .events-header h1 {
-        color: #667eea;
-        margin: 0;
-    }
-
-    .events-header .btn {
-        white-space: nowrap;
-    }
-
-    .filters-section {
-        background: white;
-        padding: 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 2rem;
-    }
-
-    .filters-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-        color: #333;
-    }
-
-    /* Layout orizzontale dei filtri (ripristinato)
-       - i campi stanno su una riga quando lo spazio lo permette
-       - su schermi piccoli ogni campo va su più righe grazie a flex-wrap
-       - i bottoni stanno sempre sotto i campi e sono allineati orizzontalmente
-    */
-    .filters-form {
-        display: flex;
-        gap: 1.5rem;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .filter-group {
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 220px; /* cresce per occupare spazio mantenendo una minima larghezza */
-        min-width: 180px;
-    }
-
-    .filter-group label {
-        margin-bottom: 0.5rem;
-        font-weight: 500;
-        color: #333;
-    }
-
-    .filter-group input,
-    .filter-group select {
-        padding: 0.75rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 0.95rem;
-        transition: border-color 0.3s;
-    }
-
-    .filter-group input:focus,
-    .filter-group select:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    /* Forza i bottoni su una nuova riga, ma li mostra affiancati */
-    .filter-actions {
-        display: flex;
-        gap: 0.75rem;
-        flex-basis: 100%;
-        justify-content: flex-start;
-        margin-top: 0.5rem;
-    }
-
-    .btn-filter {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.95rem;
-    }
-
-    .btn-clear {
-        background-color: #6c757d;
-    }
-
-    .btn-clear:hover {
-        background-color: #5a6268;
-    }
-
-    /* Events Grid */
-    .events-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .event-card {
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s, box-shadow 0.3s;
-        display: flex;
-        flex-direction: column;
-        cursor: pointer;
-    }
-
-    .event-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .event-card a {
-        text-decoration: none;
-        color: inherit;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .event-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 1.5rem;
-    }
-
-    .event-category {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.3);
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        margin-bottom: 0.5rem;
-        width: fit-content;
-    }
-
-    .event-title {
-        font-size: 1.3rem;
-        font-weight: bold;
-        margin: 0;
-    }
-
-    .event-body {
-        padding: 1.5rem;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .event-date {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #666;
-        margin-bottom: 0.75rem;
-        font-size: 0.95rem;
-    }
-
-    .event-date-icon {
-        color: #667eea;
-        font-weight: bold;
-    }
-
-    .event-location {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #666;
-        margin-bottom: 1rem;
-        font-size: 0.95rem;
-    }
-
-    .event-location-icon {
-        color: #667eea;
-        font-weight: bold;
-    }
-
-    .event-description {
-        color: #555;
-        font-size: 0.95rem;
-        line-height: 1.5;
-        flex: 1;
-        margin-bottom: 1rem;
-    }
-
-    .event-organizer {
-        font-size: 0.85rem;
-        color: #999;
-        border-top: 1px solid #eee;
-        padding-top: 0.75rem;
-    }
-
-    .event-organizer strong {
-        color: #667eea;
-    }
-
-    .event-footer {
-        padding: 0 1.5rem 1.5rem;
-        display: flex;
-        gap: 0.75rem;
-    }
-
-    .event-footer .btn {
-        flex: 1;
-        text-align: center;
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
-    }
-
-    /* No events message */
-    .no-events {
-        text-align: center;
-        padding: 3rem 2rem;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .no-events h3 {
-        color: #667eea;
-        margin-bottom: 1rem;
-    }
-
-    .no-events p {
-        color: #666;
-        margin-bottom: 1.5rem;
-    }
-
-    /* Status badges */
-    .status-badge {
-        display: inline-block;
-        padding: 0.4rem 0.8rem;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        margin-bottom: 0.75rem;
-    }
-
-    .status-registered {
-        background-color: #d4edda;
-        color: #155724;
-    }
-
-    .status-upcoming {
-        background-color: #cce5ff;
-        color: #004085;
-    }
-
-    /* Info box */
-    .info-box {
-        background: #f0f4ff;
-        padding: 1.5rem;
-        border-radius: 8px;
-        margin-bottom: 2rem;
-        border-left: 4px solid #667eea;
-    }
-
-    .info-box p {
-        margin: 0;
-        color: #333;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/events.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -300,7 +31,6 @@
                 {% endfor %}
             </select>
         </div>
-
 
         <div class="filter-group">
             <label for="date">Data</label>
@@ -374,7 +104,7 @@
                         <p class="event-description">{{ event.description|truncatewords:30 }}</p>
 
                         <div class="event-organizer">
-                            <strong>Organizzatore:</strong> <a href="{% url 'organizer_events' event.organizer.id %}" style="color: #667eea; text-decoration: none;">{{ event.organizer.get_full_name|default:event.organizer.username }}</a>
+                            <strong>Organizzatore:</strong> <a href="{% url 'organizer_events' event.organizer.id %}" class="organizer-link">{{ event.organizer.get_full_name|default:event.organizer.username }}</a>
                         </div>
                     </div>
                 </a>
@@ -385,10 +115,6 @@
     <div class="no-events">
         <h3>Nessun evento trovato</h3>
         <p>Prova a modificare i filtri o visita più tardi per nuovi eventi!</p>
-        {% if not user.is_authenticated %}
-        {% endif %}
     </div>
 {% endif %}
-
 {% endblock %}
-

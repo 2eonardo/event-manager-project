@@ -21,10 +21,12 @@ Il sito è strutturato attraverso i seguenti template dinamici, tutti estesi da 
 4. **`event_list.html` (Home Page / Bacheca Globale)**: Mostra tutti gli eventi presenti nel database a chiunque acceda al sito. Per gli organizzatori mostra in aggiunta il tasto "Crea Nuovo Evento".
 5. **`event_detail.html` (Dettaglio Evento)**: Mostra i dettagli di un singolo evento. Se l'utente loggato è l'organizzatore dell'evento, mostra anche l'elenco dei partecipanti iscritti; se è un partecipante standard, mostra il pulsante di iscrizione.
 6. **`event_form.html` (Crea/Modifica Evento)**: Form dinamico (ModelForm) utilizzato dagli organizzatori per inserire o aggiornare i propri eventi.
-7. **`profile.html` (Area Personale)**: Mostra i dati dell'utente, la bio e una lista personalizzata:
+7. **`event_confirm_delete.html` (Conferma Eliminazione)**: Pagina di sicurezza intermedia che chiede conferma all'organizzatore
+8. **`profile.html` (Area Personale)**: Mostra i dati dell'utente, la bio e una lista personalizzata:
    * Gli *Attendee* vedono solo l'elenco degli eventi a cui si sono iscritti.
    * Gli *Organizer* vedono solo l'elenco degli eventi creati da loro.
-
+9. **`profile_edit.html` (Modifica Profilo)**: Form dedicato che permette a qualsiasi utente autenticato di aggiornare le proprie informazioni personali (Nome, Cognome, Email e Bio) garantendo l'unicità dell'indirizzo email aggiornato.
+10. **`organizer_events.html` (Profilo Pubblico Organizzatore)**: Pagina pubblica che consente ai partecipanti di visualizzare il profilo di un organizzatore specifico, leggere la sua bio e consultare la bacheca di tutti gli eventi creati da quest'ultimo.
 ---
 ## Funzionalità Implementate
 - La registrazione di un nuovo utente avviene tramite il form di registrazione, dove l'utente può scegliere se registrarsi come partecipante o come organizzatore. In base al ruolo scelto, l'utente avrà accesso a funzionalità diverse.
@@ -55,7 +57,7 @@ Gli organizzatori non possono iscriversi agli eventi come i partecipanti, ma pre
 ### 1. Clona il repository
 Apri il terminale e clona il progetto sul tuo computer:
 ```bash
-git clone <URL_DEL_TUO_REPOSITORY_GITHUB>
+git clone https://github.com/2eonardo/event-manager-project.git
 cd event-manager-project
 ```
 Windows:
