@@ -132,6 +132,7 @@ Il file di database incluso nel progetto si chiama **`db.sqlite3`**.
 
 All'interno del database sono già presenti 2 account di prova per ogni ruolo, username, email e password sono riportati nella sezione successiva.
 Inoltre il database è già stato popolato con diversi eventi di esempio e categorie di quest'ultimi.
+
 ---
 ## Credenziali di Prova (Demo Accounts)
 
