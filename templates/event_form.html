@@ -51,7 +51,7 @@
                     Crea Evento
                 {% endif %}
             </button>
-            <a href="{% url 'event_list' %}" class="btn-cancel btn">Annulla</a>
+            <a href="{% if request.META.HTTP_REFERER %}{{ request.META.HTTP_REFERER }}{% else %}{% url 'event_list' %}{% endif %}"  class="btn-cancel btn">Annulla</a>
         </div>
     </form>
 </div>

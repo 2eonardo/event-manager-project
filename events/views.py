@@ -15,7 +15,6 @@ User = get_user_model()
 
 
 class OrganizerRequiredMixin(UserPassesTestMixin):
-    """Verifica che l'utente sia un organizzatore"""
 
     def test_func(self):
         return self.request.user.role == 'organizer'
@@ -26,7 +25,6 @@ class OrganizerRequiredMixin(UserPassesTestMixin):
 
 
 class EventOwnerRequiredMixin(UserPassesTestMixin):
-    """Verifica che l'utente sia l'effettivo proprietario dell'evento"""
 
     def test_func(self):
         event = self.get_object()
@@ -41,7 +39,6 @@ class EventOwnerRequiredMixin(UserPassesTestMixin):
 
 @login_required(login_url='login')
 def event_list(request):
-    """Visualizza e filtra gli eventi"""
     events = Event.objects.all()
     categories = Category.objects.all()
 
@@ -144,7 +141,15 @@ class EventUpdateView(LoginRequiredMixin, EventOwnerRequiredMixin, UpdateView):
 class EventDeleteView(LoginRequiredMixin, EventOwnerRequiredMixin, DeleteView):
     model = Event
     template_name = 'event_confirm_delete.html'
-    success_url = reverse_lazy('event_list')
+
+    def get_success_url(self):
+        next_page = self.request.GET.get('next')
+        if next_page:
+            if 'create' in next_page:
+                return reverse_lazy('profile')
+
+            return next_page
+        return reverse_lazy('event_list')
 
     def post(self, request, *args, **kwargs):
         messages.success(self.request, 'Evento eliminato con successo!')
@@ -154,7 +159,6 @@ class EventDeleteView(LoginRequiredMixin, EventOwnerRequiredMixin, DeleteView):
 @login_required(login_url='login')
 @require_http_methods(["POST"])
 def event_register(request, pk):
-    """Vista per iscriversi a un evento in modo atomico e sicuro"""
     event = get_object_or_404(Event, pk=pk)
 
     if event.date < timezone.now():
@@ -189,6 +193,11 @@ def event_unregister(request, pk):
     else:
         messages.info(request, 'Non eri iscritto a questo evento.')
 
+    referer = request.META.get('HTTP_REFERER')
+    if referer:
+        return redirect(referer)
+
+    # Fallback di sicurezza nel caso in cui il browser non fornisca il referer
     return redirect('event_detail', pk=event.id)
 
 

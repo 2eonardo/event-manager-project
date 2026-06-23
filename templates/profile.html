@@ -94,7 +94,7 @@
                                     <div class="event-card-actions-profile">
                                         <a href="{% url 'event_detail' event.id %}" class="btn-view">Visualizza</a>
                                         <a href="{% url 'event_edit' event.id %}" class="btn-edit">Modifica</a>
-                                        <a href="{% url 'event_delete' event.id %}" class="btn-delete">Elimina</a>
+                                        <a href="{% url 'event_delete' event.id %}?next={% url 'profile' %}" class="btn-delete">Elimina</a>
                                     </div>
                                 </div>
                             </div>

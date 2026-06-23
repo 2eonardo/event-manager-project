@@ -8,8 +8,10 @@ class EventForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': "Titolo dell'evento"}),
             'description': forms.Textarea(attrs={'placeholder': "Descrizione dell'evento...", 'rows': 4}),
-            'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'location': forms.TextInput(attrs={'placeholder': "Luogo dell'evento"}),
+            'date': forms.DateTimeInput(
+                format='%Y-%m-%dT%H:%M',
+                attrs={'type': 'datetime-local'}
+            ),            'location': forms.TextInput(attrs={'placeholder': "Luogo dell'evento"}),
             'category': forms.Select(),
         }
         labels = {
