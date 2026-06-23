@@ -137,12 +137,11 @@
     gap: 1.5rem;
 }
 
+/* Personalizzazione Card Profilo (struttura ereditata da main.css) */
 .event-card-profile {
     background: #f8f9fa;
     border-radius: 6px;
-    overflow: hidden;
     border: 1px solid #e0e0e0;
-    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .event-card-profile:hover {
@@ -191,6 +190,7 @@
     font-size: 0.9rem;
 }
 
+/* Gestione Bottoni Azioni nel Profilo */
 .event-card-actions-profile {
     display: flex;
     gap: 0.5rem;
@@ -240,6 +240,7 @@
 
 .unregister-form {
     flex: 1;
+    display: flex;
 }
 
 .no-events-profile {
@@ -261,6 +262,7 @@
 .margin-top-1 {
     margin-top: 1rem;
 }
+
 .logout-form-sidebar {
     display: inline;
     width: 100%;
@@ -270,6 +272,7 @@
     width: 100%;
     cursor: pointer;
 }
+
 @media (max-width: 768px) {
     .profile-body {
         grid-template-columns: 1fr;
@@ -287,4 +290,3 @@
         grid-template-columns: 1fr;
     }
 }
-

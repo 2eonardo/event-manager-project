@@ -89,7 +89,7 @@
     background-color: #5a6268;
 }
 
-/* Griglia Eventi */
+/* Griglia Eventi: struttura ereditata da main.css */
 .events-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -100,11 +100,7 @@
 .event-card {
     background: white;
     border-radius: 8px;
-    overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex;
-    flex-direction: column;
     cursor: pointer;
 }
 
@@ -341,7 +337,6 @@
     text-transform: none;
 }
 
-/* Messaggi di lista vuota */
 .no-events {
     text-align: center;
     padding: 3rem 2rem;
@@ -373,32 +368,6 @@
     color: #333;
 }
 
-/* Struttura Intestazione Organizzatore */
-.organizer-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 2rem;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-}
-
-.organizer-email {
-    font-size: 1.1rem;
-    opacity: 0.8;
-    margin-top: -0.4rem;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-}
-
-.organizer-count {
-    margin-top: 0.5rem;
-    font-size: 0.95rem;
-}
-
-/* Schermata di Conferma Eliminazione */
 .confirmation-container {
     max-width: 500px;
     margin: 3rem auto;
@@ -467,42 +436,55 @@
 .delete-form {
     display: inline;
 }
-.organizer-profile-info > .organizer-email{
-    margin: 2rem;
-}
-/* Struttura Intestazione Profilo Organizzatore (Risoluzione Spaziature e Conflitti) */
-.organizer-profile-info {
-    flex: 1 !important;
+
+
+/* events.css - RIPRISTINO E OTTIMIZZAZIONE HEADER ORGANIZZATORE */
+.organizer-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
 }
 
-.organizer-profile-info h1 {
-    margin: 0 0 0.5rem 0 !important;
-    font-size: 2rem !important;
-    color: white !important;
-    line-height: 1.2 !important;
+.organizer-header .organizer-profile-info {
+    flex: 1;
 }
 
-.organizer-profile-info p {
-    margin: 0 0 0.5rem 0 !important;
-    opacity: 0.9 !important;
-    color: white !important;
-    line-height: 1.5 !important;
+.organizer-header .organizer-profile-info h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+    color: white;
+    line-height: 1.2;
 }
 
-.organizer-profile-info .organizer-email {
-    font-size: 1.1rem !important;
-    opacity: 0.8 !important;
-    margin-top: -0.2rem !important;
-    margin-bottom: 0.5rem !important;
-    font-weight: 500 !important;
+.organizer-header .organizer-profile-info p {
+    margin: 0 0 0.5rem 0;
+    opacity: 0.9;
+    color: white;
+    line-height: 1.5;
 }
 
-.organizer-profile-info .organizer-count {
-    margin-top: 1.25rem !important; /* Forza una spaziatura netta e visibile sotto l'email */
-    margin-bottom: 0 !important;
-    font-size: 0.95rem !important;
-    font-weight: 600 !important;
+.organizer-header .organizer-profile-info .organizer-email {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-top: -0.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: white;
 }
+
+.organizer-header .organizer-profile-info .organizer-count {
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: white;
+}
+
 @media (max-width: 768px) {
     .event-detail-header h1 {
         font-size: 1.8rem;

@@ -8,10 +8,14 @@
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'profile' %}" class="back-link">← Torna al Profilo</a>
+<a href="{% url 'profile' %}" class="back-link">Torna al Profilo</a>
 
 <div class="form-container form-container-sm">
     <h2>Modifica Profilo</h2>
+
+    <p class="form-mandatory-notice">
+        I campi contrassegnati con l'asterisco (<strong>*</strong>) sono obbligatori.
+    </p>
 
     <form method="POST">
         {% csrf_token %}

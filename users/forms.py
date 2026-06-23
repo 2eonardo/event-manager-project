@@ -3,9 +3,9 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 
 class SignupForm(UserCreationForm):
-    email = forms.EmailField(required=True, label="Email *")
-    first_name = forms.CharField(required=True, label="Nome *")
-    last_name = forms.CharField(required=True, label="Cognome *")
+    email = forms.EmailField(required=True, label="Email")
+    first_name = forms.CharField(required=True, label="Nome")
+    last_name = forms.CharField(required=True, label="Cognome")
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
@@ -14,14 +14,14 @@ class SignupForm(UserCreationForm):
             'bio': forms.Textarea(attrs={'rows': 3}),
         }
         labels = {
-            'role': 'Ruolo *',
+            'role': 'Ruolo',
             'bio': 'Bio (opzionale)',
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Aggiungiamo graficamente l'asterisco anche ai campi ereditati in automatico
-        self.fields['username'].label = "Username *"
+        self.fields['username'].label = "Username"
 
     # --- CONTROLLO EMAIL DUPLICATE IN REGISTRAZIONE ---
     def clean_email(self):
@@ -33,9 +33,9 @@ class SignupForm(UserCreationForm):
 
 class ProfileEditForm(forms.ModelForm):
     """Form per la modifica dei dati personali dell'utente"""
-    email = forms.EmailField(required=True, label="Email *")
-    first_name = forms.CharField(required=True, label="Nome *")
-    last_name = forms.CharField(required=True, label="Cognome *")
+    email = forms.EmailField(required=True, label="Email")
+    first_name = forms.CharField(required=True, label="Nome")
+    last_name = forms.CharField(required=True, label="Cognome")
 
     class Meta:
         model = CustomUser

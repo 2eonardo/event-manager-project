@@ -202,6 +202,14 @@ footer {
     background-color: #218838;
 }
 
+/* Unificazione strutturale delle Card esistenti (senza toccare l'HTML) */
+.event-card, .event-card-profile {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
 /* Classi di utilità comuni */
 .back-link {
     display: inline-block;
