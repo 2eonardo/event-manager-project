@@ -2,7 +2,8 @@
 ---
 - **Stutende:** Leonardo Soldani 7139732
 - **Tipo di progetto:** Full-Stack Web Application
-- **Framework utilizzato:** Django 6.0
+- **Framework utilizzato:** Django 5.1.1
+- **Versione Python:** 3.12.10
 - **Deployed version:**
 ---
 
