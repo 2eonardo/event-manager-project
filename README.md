@@ -39,7 +39,8 @@ Il sito è strutturato attraverso i seguenti template dinamici, tutti estesi da 
 ### Organizzatori:
 - Creazione eventi con nome, descrizione, luogo, categoria di appartenenza, data e orario.
 - Accesso alla bacheca personale dei propri eventi creati.
-- Modifica eventi creati, impossibilità di creare eventi con date passate, impossibilità di modificare la data di un evento impostandola nel passato.
+- Modifica eventi creati, impossibilità di creare eventi con date passate, impossibilità di modificare la data di un evento impostandola nel passato,
+impossibilità di modificare eventi scaduti (data passata).
 - Visualizzazione elenco partecipanti iscritti ai propri eventi.
 - Eliminazione eventi creati.
 

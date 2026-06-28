@@ -69,13 +69,14 @@
                 {% endif %}
             {% endif %}
         </div>
-        <!-- Azioni di gestione riservate all'organizzatore dell'evento -->
-        {% if user.is_authenticated and user == event.organizer %}
-            <div class="event-actions event-management-actions">
-                <a href="{% url 'event_edit' event.id %}" class="btn"> Modifica</a>
-                <a href="{% url 'event_delete' event.id %}?next={{ request.META.HTTP_REFERER }}" class="btn btn-danger"> Elimina</a>
-            </div>
-        {% endif %}
+       {% if user.is_authenticated and user == event.organizer %}
+            {% if event.date|date:"Y-m-d H:i" >= current_time %}
+                <div class="event-actions event-management-actions">
+                    <a href="{% url 'event_edit' event.id %}?next={{ request.META.HTTP_REFERER }}" class="btn">Modifica</a>
+                    <a href="{% url 'event_delete' event.id %}?next={{ request.META.HTTP_REFERER }}" class="btn btn-danger">Elimina</a>
+                </div>
+            {% endif %}
+       {% endif %}
 
         <!-- Elenco partecipanti (solo per organizzatore) -->
         {% if user.is_authenticated and user == event.organizer %}

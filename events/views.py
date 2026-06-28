@@ -130,6 +130,13 @@ class EventUpdateView(LoginRequiredMixin, EventOwnerRequiredMixin, UpdateView):
     form_class = EventForm
     template_name = 'event_form.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        event = self.get_object()
+        if event.date < timezone.now():
+            messages.error(request, 'Non puoi modificare un evento già concluso.')
+            return redirect('event_detail', pk=event.id)
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         messages.success(self.request, 'Evento modificato con successo!')
         return super().form_valid(form)
@@ -141,6 +148,13 @@ class EventUpdateView(LoginRequiredMixin, EventOwnerRequiredMixin, UpdateView):
 class EventDeleteView(LoginRequiredMixin, EventOwnerRequiredMixin, DeleteView):
     model = Event
     template_name = 'event_confirm_delete.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        event = self.get_object()
+        if event.date < timezone.now():
+            messages.error(request, 'Non puoi eliminare un evento già concluso.')
+            return redirect('event_detail', pk=event.id)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         next_page = self.request.GET.get('next')
